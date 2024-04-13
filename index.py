@@ -29,7 +29,7 @@ with konten:
             if not (cariNegara.empty):
                 kodeNegara = cariNegara['alpha-3'].iloc[0]
 
-                dataNegara = pd.DataFrame(dataMinyakCsv[dataMinyakCsv['kode_negara']==kodeNegara])
+                dataNegara = pd.concat(dataMinyakCsv[dataMinyakCsv['kode_negara']==kodeNegara])
                 dataNegara.index = dataNegara['tahun']
 
                 st.markdown('Tampilan')
@@ -49,7 +49,7 @@ with konten:
                 if ket:
                     st.subheader(f"Tabel Keterangan negara {inputNegara}")
             
-                    tabel = pd.DataFrame({
+                    tabel = pd.concat({
                         'Tahun': dataNegara.tahun,
                         'Jumlah Minyak': dataNegara.produksi
                     })
@@ -65,11 +65,11 @@ with konten:
         inputBanyak = st.slider('Input Jumlah Data', 0, 100)
 
         if inputTahun > 0 and inputBanyak > 0:
-            produksiUrut = pd.DataFrame(dataMinyakCsv[dataMinyakCsv['tahun']==inputTahun].sort_values(['produksi'], ascending=False))
+            produksiUrut = pd.concat(dataMinyakCsv[dataMinyakCsv['tahun']==inputTahun].sort_values(['produksi'], ascending=False))
             produksiUrut = produksiUrut.head(inputBanyak)
             produksiUrut.index = np.arange(1, len(produksiUrut)+1)
 
-            grafikTabel = pd.DataFrame()
+            grafikTabel = pd.concat()
 
             for x in range(len(produksiUrut)):
                 kodeNegara = produksiUrut['kode_negara'].iloc[x]
@@ -84,7 +84,7 @@ with konten:
                             'nama negara':kodeBaru, 
                             'produksi': produksiUrut['produksi'].iloc[x]
                             }
-                grafikTabel =grafikTabel.concat(tumpukRow, ignore_index=True)
+                grafikTabel =grafikTabel.append(tumpukRow, ignore_index=True)
             
             st.subheader(f"{inputBanyak} Besar Negara Produksi Minyak Mentah Tahun {inputTahun}")
             col1, col2 = st.columns([3,1])
@@ -111,7 +111,7 @@ with konten:
             dataKumulatif = dataKumulatif.head(inputBanyak)
             dataKumulatif = dataKumulatif.reset_index()
 
-            grafikTabel = pd.DataFrame()
+            grafikTabel = pd.concat()
 
             for x in range(len(dataKumulatif)):
                 kodeNegara = dataKumulatif['kode_negara'].iloc[x]
@@ -126,7 +126,7 @@ with konten:
                             'nama negara':kodeBaru, 
                             'produksi': dataKumulatif['produksi'].iloc[x]
                             }
-                grafikTabel = grafikTabel.concat(tumpukRow, ignore_index=True)
+                grafikTabel = grafikTabel.append(tumpukRow, ignore_index=True)
             
             st.subheader(f"{inputBanyak} Besar Negara Produksi Minyak Mentah Kumulatif")
 
@@ -152,7 +152,7 @@ with konten:
     
         radio = st.radio("Tampilan", ('Informasi Negara', 'Tabel Negara'))
 
-        dataTahun = pd.DataFrame(dataMinyakCsv[dataMinyakCsv['tahun']==inputTahun])
+        dataTahun = pd.concat(dataMinyakCsv[dataMinyakCsv['tahun']==inputTahun])
 
         dataUrutDepan = dataTahun.sort_values(['produksi'], ascending=False)
         dataNol = dataUrutDepan[dataUrutDepan['produksi'] == 0]
@@ -179,7 +179,7 @@ with konten:
             st.subheader(f'Data Negara dengan Jumlah Produksi Terbesar pada Tahun {inputTahun}')
 
             totalProduksi = dataUrutDepan['produksi'].iloc[0]
-            dataNegara = pd.DataFrame(dataMinyakCsv[dataMinyakCsv['kode_negara']==dataKode])
+            dataNegara = pd.concat(dataMinyakCsv[dataMinyakCsv['kode_negara']==dataKode])
             dataNegara.index = dataNegara['tahun']
 
             col1, col2 = st.columns([2,4])
@@ -225,7 +225,7 @@ with konten:
             st.subheader(f'Data Negara dengan Jumlah Produksi Terkecil pada Tahun {inputTahun}')
             
             totalProduksi = dataUrutBelakang['produksi'].iloc[0]
-            dataNegara = pd.DataFrame(dataMinyakCsv[dataMinyakCsv['kode_negara']==dataKode])
+            dataNegara = pd.concat(dataMinyakCsv[dataMinyakCsv['kode_negara']==dataKode])
             dataNegara.index = dataNegara['tahun']
 
             col1, col2 = st.columns([2,4])
@@ -271,7 +271,7 @@ with konten:
             st.subheader(f'Data Negara dengan Jumlah Produksi Nol pada Tahun {inputTahun}')
 
             totalProduksi = dataNol['produksi'].iloc[0]
-            dataNegara = pd.DataFrame(dataMinyakCsv[dataMinyakCsv['kode_negara']==dataKode])
+            dataNegara = pd.concat(dataMinyakCsv[dataMinyakCsv['kode_negara']==dataKode])
             dataNegara.index = dataNegara['tahun']
 
             col1, col2 = st.columns([2,4])
@@ -300,7 +300,7 @@ with konten:
 
 
         if radio == 'Tabel Negara':
-            cetakTabelBesar = pd.DataFrame()
+            cetakTabelBesar = pd.concat()
 
             for x in range (len(dataUrutDepan)):
                 dataKode = dataUrutDepan['kode_negara'].iloc[x]
@@ -325,7 +325,7 @@ with konten:
                     'total':dataUrutDepan['produksi'].iloc[x]
                     }
 
-                cetakTabelBesar = cetakTabelBesar.concat(tumpukData, ignore_index=True)
+                cetakTabelBesar = cetakTabelBesar.append(tumpukData, ignore_index=True)
 
             cetakTabelBesar.index = np.arange(1, len(cetakTabelBesar)+1)
                     
@@ -334,7 +334,7 @@ with konten:
             st.write(test)
 
             # 
-            cetakTabelKecil = pd.DataFrame()
+            cetakTabelKecil = pd.concat()
 
 
             for x in range (len(dataUrutBelakang)):
@@ -360,7 +360,7 @@ with konten:
                     'total':dataUrutBelakang['produksi'].iloc[x]
                     }
 
-                cetakTabelKecil = cetakTabelKecil.concat(tumpukData, ignore_index=True)
+                cetakTabelKecil = cetakTabelKecil.append(tumpukData, ignore_index=True)
 
             cetakTabelKecil.index = np.arange(1, len(cetakTabelKecil)+1)
                     
@@ -369,7 +369,7 @@ with konten:
             st.write(test)
 
             #
-            catakTabelNol = pd.DataFrame()
+            catakTabelNol = pd.concat()
 
 
             for x in range (len(dataNol)):
@@ -395,7 +395,7 @@ with konten:
                     'total':dataNol['produksi'].iloc[x]
                     }
 
-                catakTabelNol = catakTabelNol.concat(tumpukData, ignore_index=True)
+                catakTabelNol = catakTabelNol.append(tumpukData, ignore_index=True)
 
             catakTabelNol.index = np.arange(1, len(catakTabelNol)+1)
                     
