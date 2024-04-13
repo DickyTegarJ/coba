@@ -84,7 +84,7 @@ with konten:
                             'nama negara':kodeBaru, 
                             'produksi': produksiUrut['produksi'].iloc[x]
                             }
-                grafikTabel =grafikTabel.append(tumpukRow, ignore_index=True)
+                grafikTabel =grafikTabel.concat(tumpukRow, ignore_index=True)
             
             st.subheader(f"{inputBanyak} Besar Negara Produksi Minyak Mentah Tahun {inputTahun}")
             col1, col2 = st.columns([3,1])
@@ -126,7 +126,7 @@ with konten:
                             'nama negara':kodeBaru, 
                             'produksi': dataKumulatif['produksi'].iloc[x]
                             }
-                grafikTabel = grafikTabel.append(tumpukRow, ignore_index=True)
+                grafikTabel = grafikTabel.concat(tumpukRow, ignore_index=True)
             
             st.subheader(f"{inputBanyak} Besar Negara Produksi Minyak Mentah Kumulatif")
 
@@ -325,7 +325,7 @@ with konten:
                     'total':dataUrutDepan['produksi'].iloc[x]
                     }
 
-                cetakTabelBesar = cetakTabelBesar.append(tumpukData, ignore_index=True)
+                cetakTabelBesar = cetakTabelBesar.concat(tumpukData, ignore_index=True)
 
             cetakTabelBesar.index = np.arange(1, len(cetakTabelBesar)+1)
                     
@@ -360,7 +360,7 @@ with konten:
                     'total':dataUrutBelakang['produksi'].iloc[x]
                     }
 
-                cetakTabelKecil = cetakTabelKecil.append(tumpukData, ignore_index=True)
+                cetakTabelKecil = cetakTabelKecil.concat(tumpukData, ignore_index=True)
 
             cetakTabelKecil.index = np.arange(1, len(cetakTabelKecil)+1)
                     
@@ -395,7 +395,7 @@ with konten:
                     'total':dataNol['produksi'].iloc[x]
                     }
 
-                catakTabelNol = catakTabelNol.append(tumpukData, ignore_index=True)
+                catakTabelNol = catakTabelNol.concat(tumpukData, ignore_index=True)
 
             catakTabelNol.index = np.arange(1, len(catakTabelNol)+1)
                     
